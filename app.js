@@ -18,8 +18,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 //routes setup
-var rest_report = require('./routes/rest_report.js');
-app.use('/', rest_report);
+var word_count = require('./routes/word_count.js');
+app.use('/', word_count);
 
 app.listen(app.get('port'), () =>{
 	console.log('3000 Port : Server is running')
