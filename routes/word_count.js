@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require('body-parser');
 const {PythonShell} =require('python-shell');
+const shell = require('shelljs');
 const axios = require('axios');
 
 const app = express();
@@ -25,7 +26,7 @@ app.post("/wordcount", (req,res) => {
 
   word_count(options_wc, function(message){
     if (message == "Word Count Done"){
-      res.send("Word Count Done")
+      shell.exec('sh hadoop.sh ' + collection_name + user_id + start_date + end_date);
     } else {
       res.send("Word Count Failed")
     }

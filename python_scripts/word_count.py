@@ -40,17 +40,21 @@ class token_thread(threading.Thread):
 
 # mongo 연결
 # arguments
-# collection_name = "A오딘발할라라이징"
-# user_id = "sunnyl94"
-# start_date = "2021-01-01"
-# end_date = "2022-03-11"
+collection_name = "A오딘발할라라이징"
+user_id = "sunnyl94"
+start_date = "2021-01-01"
+end_date = "2022-03-11"
 
-collection_name = sys.argv[1]
-user_id = sys.argv[2]
-start_date = sys.argv[3]
-end_date = sys.argv[4]
+# collection_name = sys.argv[1]
+# user_id = sys.argv[2]
+# start_date = sys.argv[3]
+# end_date = sys.argv[4]
 
-client = MongoClient("mongodb://3.34.14.98:46171")
+with open('/analy1/config/mongo.json') as f:
+    mongo_config = json.load(f)
+    f.close()
+
+client = MongoClient(mongo_config["host"])
 db = client["review"]
 db_col = db[collection_name]
 
@@ -94,9 +98,10 @@ f.join()
 
 # logging.info("[Main-Thread] 프로그램을 종료합니다.")
 
-counts = Counter(noun_list)
-# print(counts.most_common(30))
-df_wc = pd.DataFrame(counts.most_common(30), columns=['text', 'frequency'])
+# counts = Counter(noun_list)
+# # print(counts.most_common(30))
+# df_wc = pd.DataFrame(counts.most_common(30), columns=['text', 'frequency'])
+df_wc = pd.DataFrame(noun_list)
 file_loc = "/analy1/result/" + user_id + "_wc.csv"
 df_wc.to_csv(file_loc, encoding='utf-8-sig', index=False)
 
