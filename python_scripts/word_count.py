@@ -40,17 +40,17 @@ class token_thread(threading.Thread):
 
 # mongo 연결
 # arguments
-collection_name = "A오딘발할라라이징"
-user_id = "sunnyl94"
-start_date = "2021-01-01"
-end_date = "2022-03-11"
+# collection_name = "A오딘발할라라이징"
+# user_id = "sunnyl94"
+# start_date = "2021-01-01"
+# end_date = "2022-03-11"
 
-# collection_name = sys.argv[1]
-# user_id = sys.argv[2]
-# start_date = sys.argv[3]
-# end_date = sys.argv[4]
+collection_name = sys.argv[1]
+user_id = sys.argv[2]
+start_date = sys.argv[3]
+end_date = sys.argv[4]
 
-with open('/analy1/config/mongo.json') as f:
+with open('/word_count/config/mongo.json') as f:
     mongo_config = json.load(f)
     f.close()
 
@@ -70,7 +70,7 @@ noun_list = []
 mecab = Mecab()
 
 start = time.time()
-n_cores = 6
+n_cores = 7
 df_split = np.array_split(df_comment,n_cores)
 
 a = token_thread('1', df_split[0])
@@ -79,6 +79,7 @@ c = token_thread('3', df_split[2])
 d = token_thread('4', df_split[3])
 e = token_thread('5', df_split[4])
 f = token_thread('6', df_split[5])
+g = token_thread('7', df_split[6])
 
 # logging.info("[Main-Thread] 쓰레드 시작 전")
 
@@ -88,6 +89,7 @@ c.start()
 d.start()
 e.start()
 f.start()
+g.start()
 
 a.join()  # 서브 조인 시작
 b.join()
@@ -95,6 +97,7 @@ c.join()
 d.join()
 e.join()
 f.join()
+g.join()
 
 # logging.info("[Main-Thread] 프로그램을 종료합니다.")
 
@@ -102,7 +105,7 @@ f.join()
 # # print(counts.most_common(30))
 # df_wc = pd.DataFrame(counts.most_common(30), columns=['text', 'frequency'])
 df_wc = pd.DataFrame(noun_list)
-file_loc = "/analy1/result/" + user_id + "_wc.csv"
+file_loc = "/word_count/result/" + user_id + "_token.csv"
 df_wc.to_csv(file_loc, encoding='utf-8-sig', index=False)
 
 # end = time.time()
